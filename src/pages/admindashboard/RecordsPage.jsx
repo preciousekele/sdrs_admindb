@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   CheckCircle,
   ClipboardList,
@@ -25,53 +25,64 @@ const RecordsPage = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  const handleDeleteRecord = (deletedId) => {
-    setRecords(prev => prev.filter(record => record.id !== deletedId));
-  };
-  
-  // Fetch stats and records on component mount
-  useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      setError(null);
-  
-      try {
-        const token = localStorage.getItem("token");
-  
-        // Fetch stats
-        const statsRes = await fetch("http://localhost:5000/api/records/stats", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-  
-        if (!statsRes.ok) {
-          throw new Error(`Error fetching stats: ${statsRes.status}`);
-        }
-  
-        const statsData = await statsRes.json();
-        setStats(statsData.stats);
-  
-        // Fetch records and SORT them immediately
-        const recordsData = await fetchRecords(token);
-        const sortedRecords = (recordsData.records || []).sort((a, b) => a.id - b.id);
-  
-        setRecords(sortedRecords);
-  
-      } catch (error) {
-        console.error("Error loading data:", error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
+  // Create a reusable function to load data that can be called when needed
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      // Fetch records first
+      const recordsData = await fetchRecords(token);
+      const sortedRecords = (recordsData.records || []).sort((a, b) => a.id - b.id);
+      setRecords(sortedRecords);
+      
+      // Fetch stats
+      const statsRes = await fetch("http://localhost:5000/api/records/stats", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!statsRes.ok) {
+        throw new Error(`Error fetching stats: ${statsRes.status}`);
       }
-    };
+
+      const statsData = await statsRes.json();
+      setStats(statsData.stats);
+
+    } catch (error) {
+      console.error("Error loading data:", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
   
+  // Initial load of data
+  useEffect(() => {
     loadData();
-  }, []); // empty array means run once when component mounts
-  
+  }, [loadData, refreshTrigger]); // Include refreshTrigger to trigger refresh
+
+  // Handle record deletion with automatic refresh
+  const handleDeleteRecord = async (deletedId) => {
+    try {
+      // First, update the UI optimistically
+      setRecords(prev => prev.filter(record => record.id !== deletedId));
+      
+      // Then trigger a refresh to update both records and stats
+      setRefreshTrigger(prev => prev + 1);
+    } catch (error) {
+      console.error("Error handling record deletion:", error);
+      // If something goes wrong, force a complete refresh
+      loadData();
+    }
+  };
 
   return (
     <div className="flex-1 overflow-auto relative z-10">
@@ -88,25 +99,25 @@ const RecordsPage = () => {
           <StatCard
             name="Total Cases"
             Icon={ClipboardList}
-            value={stats.totalRecords || "0"}
+            value={stats.totalRecords}
             color="#6366F1"
           />
           <StatCard
             name="Resolved Cases"
             Icon={CheckCircle}
-            value={stats.resolvedCount || "0"}
+            value={stats.resolvedCount}
             color="#10B981"
           />
           <StatCard
             name="Pending Cases"
             Icon={Clock}
-            value={stats.pendingCount || "0"}
+            value={stats.pendingCount}
             color="#FF0000"
           />
           <StatCard
             name="Cases Rate"
             Icon={TrendingUp}
-            value={`${stats.resolutionRate || "0"}%`}
+            value={`${stats.resolutionRate}%`}
             color="#8B5CF6"
           />
         </motion.div>
@@ -116,7 +127,20 @@ const RecordsPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <div className="flex justify-end mb-6">
+          <div className="flex justify-between mb-6">
+            <button
+              onClick={() => setRefreshTrigger(prev => prev + 1)}
+              className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-refresh-cw">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                <path d="M21 3v5h-5"></path>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                <path d="M3 21v-5h5"></path>
+              </svg>
+              Refresh
+            </button>
+            
             <Link
               to="/add-record"
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200"
@@ -139,7 +163,7 @@ const RecordsPage = () => {
             <p>Error: {error}</p>
             <button 
               className="mt-2 text-blue-500 underline" 
-              onClick={() => window.location.reload()}
+              onClick={() => setRefreshTrigger(prev => prev + 1)}
             >
               Retry
             </button>
@@ -149,16 +173,18 @@ const RecordsPage = () => {
             <p>No records found. Add a new record to get started.</p>
           </div>
         ) : (
-          <RecordsTable records={records} 
-          onDeleteRecord={handleDeleteRecord}
+          <RecordsTable 
+            records={records} 
+            onDeleteRecord={handleDeleteRecord}
           />
         )}
-         <motion.div
+        
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-        <div className="flex justify-end mb-6">
+          <div className="flex justify-end mb-6 mt-6">
             <Link
               to="/deleted-records"
               className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200"
@@ -167,9 +193,8 @@ const RecordsPage = () => {
               View Deleted Records
             </Link>
           </div>
-          </motion.div>
+        </motion.div>
       </main>
-      
     </div>
   );
 };

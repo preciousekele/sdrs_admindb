@@ -10,6 +10,7 @@ const DeletedRecordsPage = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRecords, setFilteredRecords] = useState([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0); // State to force refresh
   
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,24 +18,28 @@ const DeletedRecordsPage = () => {
 
   useEffect(() => {
     fetchDeletedRecords();
-  }, []);
+  }, [refreshTrigger]); // Re-fetch when refreshTrigger changes
 
   useEffect(() => {
+    console.log("Setting filtered records:", deletedRecords);
     setFilteredRecords(deletedRecords);
   }, [deletedRecords]);
 
   const fetchDeletedRecords = async () => {
     setLoading(true);
     setError(null);
+    console.log("Fetching deleted records...");
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/records/deleted", {
+      const response = await fetch("http://localhost:5000/api/records/deleted/all", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
+        // Add cache control to prevent browser caching
+        cache: "no-store"
       });
 
       if (!response.ok) {
@@ -42,7 +47,24 @@ const DeletedRecordsPage = () => {
       }
 
       const data = await response.json();
-      setDeletedRecords(data || []);
+      console.log("API Response:", data);
+      
+      // Extract the records based on API structure
+      let recordsArray = [];
+      
+      if (data.deletedRecords && Array.isArray(data.deletedRecords)) {
+        // If the API returns data in the format { deletedRecords: [...] }
+        recordsArray = data.deletedRecords;
+      } else if (Array.isArray(data)) {
+        // If the API directly returns an array
+        recordsArray = data;
+      } else if (data.records && Array.isArray(data.records)) {
+        // Fallback for other formats
+        recordsArray = data.records;
+      }
+      
+      console.log("Processed records array:", recordsArray);
+      setDeletedRecords(recordsArray);
     } catch (error) {
       console.error("Error loading deleted records:", error);
       setError(error.message);
@@ -66,11 +88,14 @@ const DeletedRecordsPage = () => {
         throw new Error(`Error restoring record: ${response.status}`);
       }
 
-      // Remove the restored record from the list
+      // Remove the restored record from the local state
       setDeletedRecords((prev) => prev.filter((record) => record.id !== id));
       
-      // Show success message (optional)
+      // Show success message
       alert("Record restored successfully!");
+      
+      // Force a refresh to ensure we have the latest data
+      setRefreshTrigger(prev => prev + 1);
     } catch (error) {
       console.error("Error restoring record:", error);
       alert(`Failed to restore record: ${error.message}`);
@@ -81,12 +106,19 @@ const DeletedRecordsPage = () => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
+    // Ensure we're filtering an array
+    if (!Array.isArray(deletedRecords)) {
+      console.error("deletedRecords is not an array:", deletedRecords);
+      setFilteredRecords([]);
+      return;
+    }
+
     const filtered = deletedRecords.filter(
       (record) =>
-        record.studentName?.toLowerCase().includes(term) ||
-        record.matricNumber?.toString().includes(term) ||
-        record.offense?.toLowerCase().includes(term) ||
-        record.status?.toLowerCase().includes(term)
+        (record.studentName?.toLowerCase() || "").includes(term) ||
+        (record.matricNumber?.toString() || "").includes(term) ||
+        (record.offense?.toLowerCase() || "").includes(term) ||
+        (record.status?.toLowerCase() || "").includes(term)
     );
 
     setFilteredRecords(filtered);
@@ -94,10 +126,12 @@ const DeletedRecordsPage = () => {
   };
 
   // Calculate pagination values
+  // Ensure filteredRecords is an array before trying to slice it
+  const safeFilteredRecords = Array.isArray(filteredRecords) ? filteredRecords : [];
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
-  const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+  const currentRecords = safeFilteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(safeFilteredRecords.length / recordsPerPage);
 
   // Pagination navigation handlers
   const goToPreviousPage = () => {
@@ -132,6 +166,11 @@ const DeletedRecordsPage = () => {
     }
   };
 
+  // Function to manually refresh data
+  const handleManualRefresh = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
+
   return (
     <div className="flex-1 overflow-auto relative z-10">
       <Header title="DELETED RECORDS" />
@@ -150,6 +189,14 @@ const DeletedRecordsPage = () => {
               <ChevronLeft className="h-4 w-4" />
               Back to Records
             </Link>
+            
+            <button
+              onClick={handleManualRefresh}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Refresh Data
+            </button>
           </div>
         </motion.div>
 
@@ -192,9 +239,20 @@ const DeletedRecordsPage = () => {
                 Retry
               </button>
             </div>
-          ) : deletedRecords.length === 0 ? (
+          ) : safeFilteredRecords.length === 0 ? (
             <div className="text-center py-10 text-gray-300">
               <p>No deleted records found.</p>
+              <p className="text-sm mt-2">
+                {deletedRecords.length > 0 
+                  ? `Found ${deletedRecords.length} records but filter returned none.` 
+                  : "No records were returned from the server."}
+              </p>
+              <button 
+                className="mt-2 text-blue-500 underline" 
+                onClick={handleManualRefresh}
+              >
+                Refresh Data
+              </button>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -241,16 +299,16 @@ const DeletedRecordsPage = () => {
                         {indexOfFirstRecord + index + 1}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
-                        {record.studentName}
+                        {record.studentName || "N/A"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                        {record.matricNumber}
+                        {record.matricNumber || "N/A"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                        {record.offense}
+                        {record.offense || "N/A"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                        {record.punishment}
+                        {record.punishment || "N/A"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                         {formatDate(record.createdAt || record.date)}
@@ -264,7 +322,7 @@ const DeletedRecordsPage = () => {
                             record.status
                           )}`}
                         >
-                          {record.status}
+                          {record.status || "Unknown"}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
@@ -284,7 +342,7 @@ const DeletedRecordsPage = () => {
           )}
 
           {/* Pagination controls */}
-          {filteredRecords.length > recordsPerPage && (
+          {safeFilteredRecords.length > recordsPerPage && (
             <div className="flex justify-center items-center mt-4 space-x-4">
               <button
                 onClick={goToPreviousPage}
