@@ -14,6 +14,7 @@ import EditUserForm from "./components/users/EditUserForm";
 import EditProfile from "./components/settings/EditUserProfile";
 import ChangePassword from "./components/settings/EditPassword";
 import Profile from "./components/settings/Profile";
+import DeletedRecordsPage from "./components/cases/deletedRecordsPage";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,6 +85,7 @@ function App() {
         <Route path="/settings" element={<SettingsPages />} />
         <Route path="/add-record" element={<AddRecordForm />} />
         <Route path="/edit-record/:id" element={<EditRecordForm />} />
+        <Route path="/deleted-records" element={<DeletedRecordsPage />} />
         <Route path="/users/:userId/activity" element={<UserActivityLog />} />
         <Route path="/edit-user/:id" element={<EditUserForm />} />
         <Route path="/edit-profile" element={<EditProfile />} />

@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from "react";
-import { Edit, Search, Eye } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Edit, Search, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import RecordDetailsModal from "./RecordDetailsModal";
@@ -31,7 +31,11 @@ const formatDate = (dateString) => {
 const RecordsTable = ({ records, onDeleteRecord }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRecords, setFilteredRecords] = useState(records);
-
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 15;
+  
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -48,10 +52,26 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
         record.studentName.toLowerCase().includes(term) ||
         record.matricNumber.toString().includes(term) ||
         record.offense.toLowerCase().includes(term) ||
-        record.status.toLowerCase().includes(term)
+        record.status?.toLowerCase().includes(term)
     );
 
     setFilteredRecords(filtered);
+    setCurrentPage(1); // Reset to first page on new search
+  };
+
+  // Calculate pagination values
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+
+  // Pagination navigation handlers
+  const goToPreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const goToNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
 
   // Modal handlers
@@ -120,14 +140,14 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
           </thead>
 
           <tbody className="bg-gray-800 divide-y divide-gray-700">
-            {filteredRecords.length > 0 ? (
-              filteredRecords.map((record, index) => (
+            {currentRecords.length > 0 ? (
+              currentRecords.map((record, index) => (
                 <tr
                   key={record.id}
                   className="hover:bg-gray-700/50 transition-colors"
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    {index + 1}
+                    {indexOfFirstRecord + index + 1}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
                     {record.studentName}
@@ -184,6 +204,39 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination controls */}
+      {filteredRecords.length > recordsPerPage && (
+        <div className="flex justify-center items-center mt-4 space-x-4">
+          <button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            className={`p-2 rounded-full ${
+              currentPage === 1 
+                ? "text-gray-500 cursor-not-allowed" 
+                : "text-gray-300 hover:bg-gray-700"
+            }`}
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          
+          <span className="text-gray-300 text-sm">
+            Page {currentPage} of {totalPages}
+          </span>
+          
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className={`p-2 rounded-full ${
+              currentPage === totalPages 
+                ? "text-gray-500 cursor-not-allowed" 
+                : "text-gray-300 hover:bg-gray-700"
+            }`}
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
+      )}
 
       {/* Record Details Modal */}
       <RecordDetailsModal

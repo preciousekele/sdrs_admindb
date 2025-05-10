@@ -4,6 +4,7 @@ import {
   ClipboardList,
   Clock,
   FilePlus2,
+  Trash2,
   TrendingUp,
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -121,7 +122,7 @@ const RecordsPage = () => {
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200"
             >
               <FilePlus2 className="h-4 w-4" />
-              Add Record
+              New Record
             </Link>
           </div>
         </motion.div>
@@ -152,7 +153,23 @@ const RecordsPage = () => {
           onDeleteRecord={handleDeleteRecord}
           />
         )}
+         <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+        <div className="flex justify-end mb-6">
+            <Link
+              to="/deleted-records"
+              className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200"
+            >
+              <Trash2 className="h-4 w-4" />
+              View Deleted Records
+            </Link>
+          </div>
+          </motion.div>
       </main>
+      
     </div>
   );
 };
