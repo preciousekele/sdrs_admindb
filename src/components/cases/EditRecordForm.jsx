@@ -16,6 +16,7 @@ const EditRecordForm = () => {
   const [formData, setFormData] = useState({
     studentName: record?.studentName || "",
     matricNumber: record?.matricNumber || "",
+    department: record?.department || "",
     offense: record?.offense || "",
     punishment: record?.punishment || "",
     date: record?.date || "",
@@ -26,7 +27,7 @@ const EditRecordForm = () => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -37,25 +38,24 @@ const EditRecordForm = () => {
         console.error("No authentication token found!");
         return;
       }
-  
+
       const { ...dataWithoutDate } = formData; // Ignore date for update
       await updateRecord(record.id, dataWithoutDate, token);
-  
+
       console.log("Record updated successfully!");
       setIsEditing(false);
-  
+
       // Go back to records page after update
       navigate("/records");
-  
     } catch (error) {
       console.error("Error updating record:", error);
     }
   };
-  
 
   const handleCancel = () => {
     setIsEditing(false);
-    setFormData({ // Reset to original values
+    setFormData({
+      // Reset to original values
       studentName: record?.studentName || "",
       matricNumber: record?.matricNumber || "",
       offense: record?.offense || "",
@@ -138,6 +138,24 @@ const EditRecordForm = () => {
           ) : (
             <div className="p-2 bg-gray-700 rounded-md text-gray-300">
               {formData.matricNumber}
+            </div>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-400 mb-1">Department</label>
+          {isEditing ? (
+            <input
+              type="text"
+              id="department"
+              value={formData.department}
+              onChange={handleChange}
+              className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              required
+            />
+          ) : (
+            <div className="p-2 bg-gray-700 rounded-md text-gray-300">
+              {formData.department}
             </div>
           )}
         </div>

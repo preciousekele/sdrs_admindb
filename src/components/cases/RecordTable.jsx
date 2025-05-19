@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Edit, Search, Eye, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import {
+  Edit,
+  Search,
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+  Trash2,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import RecordDetailsModal from "./RecordDetailsModal";
@@ -31,22 +38,26 @@ const formatDate = (dateString) => {
 const RecordsTable = ({ records, onDeleteRecord }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRecords, setFilteredRecords] = useState([]);
-  
+
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 15;
-  
+
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // Filter out any records that might have isDeleted set to true
     // This ensures consistency between server state and UI
-    const activeRecords = Array.isArray(records) 
-      ? records.filter(record => !record.isDeleted) 
+    const activeRecords = Array.isArray(records)
+      ? records.filter((record) => !record.isDeleted)
       : [];
-    
-    console.log(`Filtered ${records?.length || 0} records to ${activeRecords.length} active records`);
+
+    console.log(
+      `Filtered ${records?.length || 0} records to ${
+        activeRecords.length
+      } active records`
+    );
     setFilteredRecords(activeRecords);
   }, [records]);
 
@@ -55,8 +66,8 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
     setSearchTerm(term);
 
     // Make sure we're only searching through non-deleted records
-    const activeRecords = Array.isArray(records) 
-      ? records.filter(record => !record.isDeleted) 
+    const activeRecords = Array.isArray(records)
+      ? records.filter((record) => !record.isDeleted)
       : [];
 
     const filtered = activeRecords.filter(
@@ -64,6 +75,7 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
         (record.studentName?.toLowerCase() || "").includes(term) ||
         (record.matricNumber?.toString() || "").includes(term) ||
         (record.offense?.toLowerCase() || "").includes(term) ||
+        (record.department?.toLowerCase() || "").includes(term) ||
         (record.status?.toLowerCase() || "").includes(term)
     );
 
@@ -72,10 +84,15 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
   };
 
   // Calculate pagination values
-  const safeFilteredRecords = Array.isArray(filteredRecords) ? filteredRecords : [];
+  const safeFilteredRecords = Array.isArray(filteredRecords)
+    ? filteredRecords
+    : [];
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = safeFilteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+  const currentRecords = safeFilteredRecords.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
   const totalPages = Math.ceil(safeFilteredRecords.length / recordsPerPage);
 
   // Pagination navigation handlers
@@ -135,6 +152,9 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
                 Matric Number
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Department
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Offense
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -167,6 +187,9 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     {record.matricNumber || "N/A"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    {record.department || "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     {record.offense || "N/A"}
@@ -206,7 +229,6 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
                     >
                       <Eye className="h-5 w-5" />
                     </button>
-                
                   </td>
                 </tr>
               ))
@@ -228,24 +250,24 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
             onClick={goToPreviousPage}
             disabled={currentPage === 1}
             className={`p-2 rounded-full ${
-              currentPage === 1 
-                ? "text-gray-500 cursor-not-allowed" 
+              currentPage === 1
+                ? "text-gray-500 cursor-not-allowed"
                 : "text-gray-300 hover:bg-gray-700"
             }`}
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
-          
+
           <span className="text-gray-300 text-sm">
             Page {currentPage} of {totalPages}
           </span>
-          
+
           <button
             onClick={goToNextPage}
             disabled={currentPage === totalPages}
             className={`p-2 rounded-full ${
-              currentPage === totalPages 
-                ? "text-gray-500 cursor-not-allowed" 
+              currentPage === totalPages
+                ? "text-gray-500 cursor-not-allowed"
                 : "text-gray-300 hover:bg-gray-700"
             }`}
           >

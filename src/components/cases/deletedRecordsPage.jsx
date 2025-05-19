@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Trash2, RefreshCw, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Trash2,
+  RefreshCw,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import Header from "../../components/common/Header";
 import { Link } from "react-router-dom";
 
@@ -11,7 +17,7 @@ const DeletedRecordsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0); // State to force refresh
-  
+
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 15;
@@ -32,15 +38,18 @@ const DeletedRecordsPage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/records/deleted/all", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        // Add cache control to prevent browser caching
-        cache: "no-store"
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/records/deleted/all",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          // Add cache control to prevent browser caching
+          cache: "no-store",
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Error fetching deleted records: ${response.status}`);
@@ -48,10 +57,10 @@ const DeletedRecordsPage = () => {
 
       const data = await response.json();
       console.log("API Response:", data);
-      
+
       // Extract the records based on API structure
       let recordsArray = [];
-      
+
       if (data.deletedRecords && Array.isArray(data.deletedRecords)) {
         // If the API returns data in the format { deletedRecords: [...] }
         recordsArray = data.deletedRecords;
@@ -62,7 +71,7 @@ const DeletedRecordsPage = () => {
         // Fallback for other formats
         recordsArray = data.records;
       }
-      
+
       console.log("Processed records array:", recordsArray);
       setDeletedRecords(recordsArray);
     } catch (error) {
@@ -76,13 +85,16 @@ const DeletedRecordsPage = () => {
   const handleRestore = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5000/api/records/restore/${id}`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/records/restore/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Error restoring record: ${response.status}`);
@@ -90,12 +102,12 @@ const DeletedRecordsPage = () => {
 
       // Remove the restored record from the local state
       setDeletedRecords((prev) => prev.filter((record) => record.id !== id));
-      
+
       // Show success message
       alert("Record restored successfully!");
-      
+
       // Force a refresh to ensure we have the latest data
-      setRefreshTrigger(prev => prev + 1);
+      setRefreshTrigger((prev) => prev + 1);
     } catch (error) {
       console.error("Error restoring record:", error);
       alert(`Failed to restore record: ${error.message}`);
@@ -118,6 +130,7 @@ const DeletedRecordsPage = () => {
         (record.studentName?.toLowerCase() || "").includes(term) ||
         (record.matricNumber?.toString() || "").includes(term) ||
         (record.offense?.toLowerCase() || "").includes(term) ||
+        (record.department?.toLowerCase() || "").includes(term) ||
         (record.status?.toLowerCase() || "").includes(term)
     );
 
@@ -127,10 +140,15 @@ const DeletedRecordsPage = () => {
 
   // Calculate pagination values
   // Ensure filteredRecords is an array before trying to slice it
-  const safeFilteredRecords = Array.isArray(filteredRecords) ? filteredRecords : [];
+  const safeFilteredRecords = Array.isArray(filteredRecords)
+    ? filteredRecords
+    : [];
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = safeFilteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+  const currentRecords = safeFilteredRecords.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
   const totalPages = Math.ceil(safeFilteredRecords.length / recordsPerPage);
 
   // Pagination navigation handlers
@@ -168,7 +186,7 @@ const DeletedRecordsPage = () => {
 
   // Function to manually refresh data
   const handleManualRefresh = () => {
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   return (
@@ -189,7 +207,7 @@ const DeletedRecordsPage = () => {
               <ChevronLeft className="h-4 w-4" />
               Back to Records
             </Link>
-            
+
             <button
               onClick={handleManualRefresh}
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200"
@@ -218,22 +236,30 @@ const DeletedRecordsPage = () => {
                 value={searchTerm}
                 onChange={handleSearch}
               />
-              <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
+              <Search
+                className="absolute left-3 top-2.5 text-gray-400"
+                size={18}
+              />
             </div>
           </div>
 
           {loading ? (
             <div className="text-center py-10">
-              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
-                <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+              <div
+                className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                role="status"
+              >
+                <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                  Loading...
+                </span>
               </div>
               <p className="mt-2 text-gray-300">Loading deleted records...</p>
             </div>
           ) : error ? (
             <div className="text-center py-10 text-red-500">
               <p>Error: {error}</p>
-              <button 
-                className="mt-2 text-blue-500 underline" 
+              <button
+                className="mt-2 text-blue-500 underline"
                 onClick={fetchDeletedRecords}
               >
                 Retry
@@ -243,12 +269,12 @@ const DeletedRecordsPage = () => {
             <div className="text-center py-10 text-gray-300">
               <p>No deleted records found.</p>
               <p className="text-sm mt-2">
-                {deletedRecords.length > 0 
-                  ? `Found ${deletedRecords.length} records but filter returned none.` 
+                {deletedRecords.length > 0
+                  ? `Found ${deletedRecords.length} records but filter returned none.`
                   : "No records were returned from the server."}
               </p>
-              <button 
-                className="mt-2 text-blue-500 underline" 
+              <button
+                className="mt-2 text-blue-500 underline"
                 onClick={handleManualRefresh}
               >
                 Refresh Data
@@ -267,6 +293,9 @@ const DeletedRecordsPage = () => {
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       Matric Number
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      Department
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       Offense
@@ -303,6 +332,9 @@ const DeletedRecordsPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                         {record.matricNumber || "N/A"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        {record.department || "N/A"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                         {record.offense || "N/A"}
@@ -348,24 +380,24 @@ const DeletedRecordsPage = () => {
                 onClick={goToPreviousPage}
                 disabled={currentPage === 1}
                 className={`p-2 rounded-full ${
-                  currentPage === 1 
-                    ? "text-gray-500 cursor-not-allowed" 
+                  currentPage === 1
+                    ? "text-gray-500 cursor-not-allowed"
                     : "text-gray-300 hover:bg-gray-700"
                 }`}
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
-              
+
               <span className="text-gray-300 text-sm">
                 Page {currentPage} of {totalPages}
               </span>
-              
+
               <button
                 onClick={goToNextPage}
                 disabled={currentPage === totalPages}
                 className={`p-2 rounded-full ${
-                  currentPage === totalPages 
-                    ? "text-gray-500 cursor-not-allowed" 
+                  currentPage === totalPages
+                    ? "text-gray-500 cursor-not-allowed"
                     : "text-gray-300 hover:bg-gray-700"
                 }`}
               >

@@ -192,7 +192,14 @@ const UserTable = () => {
                       <div className="text-sm text-gray-300">{user.email}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-800 text-blue-100">
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                      ${
+                        user.role === "admin"
+                          ? "bg-blue-800 text-blue-100"
+                          : "bg-purple-900 text-green-100"
+                      }`}
+                      >
                         {user.role}
                       </span>
                     </td>

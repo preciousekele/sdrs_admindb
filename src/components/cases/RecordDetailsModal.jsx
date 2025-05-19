@@ -1,13 +1,13 @@
-import { X, Edit, Trash2 } from "lucide-react";
+import { X, Edit, Trash2, Download } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteRecord } from "../../services/recordService";
-
+import { downloadRecordPDF } from "../../utils/pdfUtils";
 const RecordDetailsModal = ({
   record,
   isOpen,
   onClose,
-  onDelete // Parent passes this to refresh UI
+  onDelete, // Parent passes this to refresh UI
 }) => {
   const navigate = useNavigate();
   const modalRef = useRef(null);
@@ -47,7 +47,12 @@ const RecordDetailsModal = ({
 
   // Confirm and process deletion
   const confirmDelete = async () => {
-    if (!window.confirm("ARE YOU SURE YOU WANT TO PERMANENTLY DELETE THIS RECORD? ")) return;
+    if (
+      !window.confirm(
+        "ARE YOU SURE YOU WANT TO PERMANENTLY DELETE THIS RECORD? "
+      )
+    )
+      return;
 
     try {
       console.log("Confirm delete called for record:", record.id);
@@ -69,7 +74,6 @@ const RecordDetailsModal = ({
         onDelete(record.id);
       }
       onClose(); // close the details modal
-
     } catch (error) {
       console.error("Error deleting record:", error);
     }
@@ -107,13 +111,25 @@ const RecordDetailsModal = ({
           </div>
 
           {/* Record Details */}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
-              <h3 className="text-sm font-medium text-gray-400 mb-1">Offense</h3>
-              <p className="text-lg text-gray-200">{record.offense}</p>
+              <h3 className="text-sm font-medium text-gray-400 mb-1">
+                Department
+              </h3>
+              <p className="text-lg text-gray-200">{record.department}</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-gray-400 mb-1">Punishment</h3>
+              <h3 className="text-sm font-medium text-gray-400 mb-1">
+                Offense
+              </h3>
+              <p className="text-lg text-gray-200">{record.offense}</p>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-medium text-gray-400 mb-1">
+                Punishment
+              </h3>
               <p className="text-lg text-gray-200">{record.punishment}</p>
             </div>
             <div>
@@ -146,7 +162,13 @@ const RecordDetailsModal = ({
               <Trash2 className="w-4 h-4" />
               Delete
             </button>
-
+            <button
+              onClick={() => downloadRecordPDF(record)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition-colors"
+            >
+              <Download className="w-4 h-4" />
+               PDF
+            </button>
           </div>
         </div>
       </div>

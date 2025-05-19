@@ -97,7 +97,7 @@ export const deleteRecord = async (id, token) => {
       },
     });
 
-    // ✅ Only parse once and return
+    // Only parse once and return
     const data = await response.json();
 
     if (!response.ok) {

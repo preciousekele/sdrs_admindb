@@ -11,10 +11,11 @@ const AddRecordForm = () => {
   const [formData, setFormData] = useState({
     studentName: "",
     matricNumber: "",
+    department: "",
     offense: "",
     punishment: "",
     date: "",
-    status: "pending"
+    status: "pending",
   });
 
   const handleChange = (e) => {
@@ -39,19 +40,22 @@ const AddRecordForm = () => {
       }
 
       await createRecord(formData, token);
-      
+
       // Reset form
       setFormData({
         studentName: "",
         matricNumber: "",
+        department: "",
         offense: "",
         punishment: "",
         date: "",
-        status: "pending"
+        status: "pending",
       });
 
       // Navigate back to records page
-      navigate("/records", { state: { success: true, message: "Record added successfully" } });
+      navigate("/records", {
+        state: { success: true, message: "Record added successfully" },
+      });
     } catch (err) {
       console.error("Failed to add record:", err);
       setError(err.message || "Failed to add record. Please try again.");
@@ -63,14 +67,15 @@ const AddRecordForm = () => {
   return (
     <div className="flex-1 overflow-auto relative z-10">
       <Header title="Add New Record" />
-      
+
       {error && (
-        <div className="bg-red-500 text-white p-3 mb-4 rounded">
-          {error}
-        </div>
+        <div className="bg-red-500 text-white p-3 mb-4 rounded">{error}</div>
       )}
-      
-      <form onSubmit={handleSubmit} className="space-y-6 bg-gray-900 p-6 text-white">
+
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 bg-gray-900 p-6 text-white"
+      >
         <div>
           <label className="block mb-1">Student Name</label>
           <input
@@ -89,6 +94,18 @@ const AddRecordForm = () => {
             type="number" // Changed to number type for better validation
             name="matricNumber"
             value={formData.matricNumber}
+            onChange={handleChange}
+            className="w-full bg-gray-700 rounded p-2"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1">Department</label>
+          <input
+            type="text"
+            name="department"
+            value={formData.department}
             onChange={handleChange}
             className="w-full bg-gray-700 rounded p-2"
             required
@@ -155,7 +172,7 @@ const AddRecordForm = () => {
           >
             {isSubmitting ? "Submitting..." : "Submit Record"}
           </button>
-          
+
           <button
             type="button"
             onClick={() => navigate("/records")}
