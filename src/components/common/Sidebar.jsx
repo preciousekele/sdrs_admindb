@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AnimatePresence } from "framer-motion";
 
 const MAIN_ITEMS = [
@@ -34,7 +34,6 @@ const LOGOUT_ITEM = {
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const navigate = useNavigate();
 
   const handleLogoutClick = () => {
     setShowLogoutModal(true);

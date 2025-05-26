@@ -69,12 +69,6 @@ function App() {
         <div className="absolute inset-0 bg-gradient-to-br" />
         <div className="absolute inset-0" />
       </div>
-
-      {/* above the route because it should be seen on all pages */}
-      {/* add toaster to the react: npm install react-hot-toast
-        installing this when there's network
-      */}
-      {/* <Toaster position="top-right" reverseOrder={false} /> */}
       
       <Sidebar />
       <Routes>
