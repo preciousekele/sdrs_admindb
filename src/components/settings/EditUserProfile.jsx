@@ -99,7 +99,7 @@ function EditProfile() {
   };
 
   const goBack = () => {
-    navigate("/settings");
+    navigate("/settingspage");
     console.log("Navigate back to settings");
   };
 

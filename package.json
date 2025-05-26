@@ -1,13 +1,16 @@
 {
-  "name": "sdars-admindbd",
+  "name": "sdars_admindb",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://preciousekele.github.io/sdars_admindb",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "start": "react-scripts start"
   },
   "dependencies": {

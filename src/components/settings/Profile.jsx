@@ -6,7 +6,7 @@ import axios from "axios";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);  // Holds profile data
+  const [user, setUser] = useState(null); 
   const [loading, setLoading] = useState(true);
 
   const handleEditProfileClick = () => {

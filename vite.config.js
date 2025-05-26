@@ -1,22 +1,23 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import path from 'path'; 
 
-// https://vite.dev/config/
 export default defineConfig({
+  base: '/sdars_admindb/',  
   plugins: [
     tailwindcss(),
     react()
   ],
   server: {
-    host: 'localhost', // Explicit host
-    port: 3001,       // Explicit port
-    strictPort: true, // Don't try other ports if 5173 is taken
-    open: true        // Automatically open browser
+    host: 'localhost',
+    port: 3001,
+    strictPort: true,
+    open: true
   },
   build: {
-    assetsInlineLimit: 4096, // Files smaller than 4kb will be inlined
-    emptyOutDir: true,       // Clear output directory on build
+    assetsInlineLimit: 4096,
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         assetFileNames: 'assets/[name]-[hash][extname]'
@@ -24,12 +25,11 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['boxicons'] // Ensure boxicons are properly optimized
+    include: ['boxicons']
   },
   resolve: {
     alias: {
-      // Add any necessary aliases here
-      '@': '/src'
+      '@': path.resolve(__dirname, 'src') // ✅ use absolute path
     }
   }
 });

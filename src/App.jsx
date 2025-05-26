@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import OverviewPage from "./pages/admindashboard/Overview";
@@ -62,6 +62,7 @@ function App() {
   }
 
   return (
+    <HashRouter>
     <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
       {/* bg1 */}
       <div className="fixed inset-0 z-0">
@@ -74,7 +75,7 @@ function App() {
         installing this when there's network
       */}
       {/* <Toaster position="top-right" reverseOrder={false} /> */}
-
+      
       <Sidebar />
       <Routes>
         <Route index element={<OverviewPage />} />
@@ -90,10 +91,11 @@ function App() {
         <Route path="/edit-user/:id" element={<EditUserForm />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/change-password" element={<ChangePassword />} />
-        <Route path="/settings" element={<Profile />} />
+        <Route path="/settingspage" element={<SettingsPages />} />
         
       </Routes>
     </div>
+    </HashRouter>
   );
 }
 

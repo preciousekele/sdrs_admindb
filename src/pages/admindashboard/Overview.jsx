@@ -8,7 +8,6 @@ import CasesDistributionChart from "../../components/overview/CasesDistributionC
 import CasesChart from "../../components/overview/CasesChart";
 import { fetchRecords } from "../../services/recordService";
 import { useState, useEffect } from "react";
-import RecordsTable from "../../components/cases/RecordTable";
 
 const OverviewPage = () => {
   const [stats, setStats] = useState({
