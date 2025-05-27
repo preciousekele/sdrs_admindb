@@ -44,14 +44,11 @@ const Sidebar = () => {
     localStorage.removeItem("authToken");
     sessionStorage.removeItem("authToken");
     
-    // 2. Clear any auth state if you're using a state management solution
-    // For example, if using Redux: dispatch(logoutUser());
-    
-    // 3. Close the modal
     setShowLogoutModal(false);
     
     // 4. Redirect to home page
-    window.location.href = "http://localhost:3000/";
+    //pushed to github, this would be changed
+    window.location.href = "https://preciousekele.github.io/sdars_frontend/#/login";
   };
 
   const handleLogoutCancel = () => {
