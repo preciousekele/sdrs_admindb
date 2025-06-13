@@ -56,10 +56,10 @@ function App() {
   }
 
   // Redirect to login if not authenticated
-  if (!isAuthenticated) {
-    window.location.href = "http://localhost:3000/login";
-    return null;
-  }
+ // if (!isAuthenticated) {
+   // window.location.href = "http://localhost:3000/login";
+    //return null;
+  //}
 
   return (
     <HashRouter>
