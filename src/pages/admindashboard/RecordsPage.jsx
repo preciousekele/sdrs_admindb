@@ -41,7 +41,7 @@ const RecordsPage = () => {
       setRecords(sortedRecords);
       
       // Fetch stats
-      const statsRes = await fetch("http://localhost:5000/api/records/stats", {
+      const statsRes = await fetch("https://sdars-backend.onrender.com/api/records/stats", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
