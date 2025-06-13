@@ -129,6 +129,7 @@ const DeletedRecordsPage = () => {
       (record) =>
         (record.studentName?.toLowerCase() || "").includes(term) ||
         (record.matricNumber?.toString() || "").includes(term) ||
+        (record.level?.toLowerCase() || "").includes(term) ||
         (record.offense?.toLowerCase() || "").includes(term) ||
         (record.department?.toLowerCase() || "").includes(term) ||
         (record.status?.toLowerCase() || "").includes(term)
@@ -295,6 +296,9 @@ const DeletedRecordsPage = () => {
                       Matric Number
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                      Level
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       Department
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -332,6 +336,9 @@ const DeletedRecordsPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                         {record.matricNumber || "N/A"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        {record.level || "N/A"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                         {record.department || "N/A"}

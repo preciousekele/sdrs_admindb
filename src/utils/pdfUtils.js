@@ -58,14 +58,15 @@ export function downloadRecordPDF(record) {
   
   addAlignedField("Student Name", record.studentName);
   addAlignedField("Matric No", record.matricNumber);
+  addAlignedField("Level", record.level || "N/A");
   addAlignedField("Department", record.department);
   addAlignedField("Offense", record.offense);
   addAlignedField("Status", record.status);
-  addAlignedField("Date", new Date(record.date).toLocaleDateString());
+  addAlignedField("Date", new Date(record.date).toLocaleDateString());  
   addAlignedField("Punishment", record.punishment);
   
  // Footer
-
+ 
  function getCurrentDate() {
   const date = new Date();
   const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];

@@ -93,7 +93,6 @@ const RecordDetailsModal = ({
           ref={modalRef}
           className="relative bg-gray-800 border border-gray-700 rounded-lg p-6 max-w-2xl w-full shadow-xl"
         >
-          {/* Header */}
           <div className="flex justify-between items-start mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-100">
@@ -109,10 +108,13 @@ const RecordDetailsModal = ({
               <X className="w-6 h-6" />
             </button>
           </div>
-
-          {/* Record Details */}
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div>
+              <h3 className="text-sm font-medium text-gray-400 mb-1">
+                Level
+              </h3>
+              <p className="text-lg text-gray-200">{record.level}</p>
+            </div>
             <div>
               <h3 className="text-sm font-medium text-gray-400 mb-1">
                 Department

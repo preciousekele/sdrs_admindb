@@ -74,6 +74,7 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
       (record) =>
         (record.studentName?.toLowerCase() || "").includes(term) ||
         (record.matricNumber?.toString() || "").includes(term) ||
+        (record.level?.toLowerCase() || "").includes(term) ||
         (record.offense?.toLowerCase() || "").includes(term) ||
         (record.department?.toLowerCase() || "").includes(term) ||
         (record.status?.toLowerCase() || "").includes(term)
@@ -152,6 +153,9 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
                 Matric Number
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Level
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Department
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -187,6 +191,9 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     {record.matricNumber || "N/A"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    {record.level || "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     {record.department || "N/A"}
@@ -234,7 +241,7 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="px-6 py-4 text-center text-gray-300">
+                <td colSpan="10" className="px-6 py-4 text-center text-gray-300">
                   No records found
                 </td>
               </tr>

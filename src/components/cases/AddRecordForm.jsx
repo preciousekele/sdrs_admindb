@@ -11,6 +11,7 @@ const AddRecordForm = () => {
   const [formData, setFormData] = useState({
     studentName: "",
     matricNumber: "",
+    level: "100",
     department: "",
     offense: "",
     punishment: "",
@@ -45,6 +46,7 @@ const AddRecordForm = () => {
       setFormData({
         studentName: "",
         matricNumber: "",
+        level: "100",
         department: "",
         offense: "",
         punishment: "",
@@ -98,6 +100,23 @@ const AddRecordForm = () => {
             className="w-full bg-gray-700 rounded p-2"
             required
           />
+        </div>
+
+        <div>
+          <label className="block mb-1">Level</label>
+          <select
+            name="level"
+            value={formData.level}
+            onChange={handleChange}
+            className="w-full bg-gray-700 rounded p-2"
+            required
+          >
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="400">400</option>
+            <option value="500">500</option>
+          </select>
         </div>
 
         <div>

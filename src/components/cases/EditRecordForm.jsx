@@ -16,6 +16,7 @@ const EditRecordForm = () => {
   const [formData, setFormData] = useState({
     studentName: record?.studentName || "",
     matricNumber: record?.matricNumber || "",
+    level: record?.level || "100", // Added level field with default value
     department: record?.department || "",
     offense: record?.offense || "",
     punishment: record?.punishment || "",
@@ -58,6 +59,8 @@ const EditRecordForm = () => {
       // Reset to original values
       studentName: record?.studentName || "",
       matricNumber: record?.matricNumber || "",
+      level: record?.level || "100", // Added level field reset
+      department: record?.department || "",
       offense: record?.offense || "",
       punishment: record?.punishment || "",
       date: record?.date || "",
@@ -142,6 +145,31 @@ const EditRecordForm = () => {
           )}
         </div>
 
+        {/* Level */}
+        <div className="mb-4">
+          <label className="block text-gray-400 mb-1">Level</label>
+          {isEditing ? (
+            <select
+              id="level"
+              value={formData.level}
+              onChange={handleChange}
+              className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              required
+            >
+              <option value="100">100 Level</option>
+              <option value="200">200 Level</option>
+              <option value="300">300 Level</option>
+              <option value="400">400 Level</option>
+              <option value="500">500 Level</option>
+            </select>
+          ) : (
+            <div className="p-2 bg-gray-700 rounded-md text-gray-300">
+              {formData.level} Level
+            </div>
+          )}
+        </div>
+
+        {/* Department */}
         <div className="mb-4">
           <label className="block text-gray-400 mb-1">Department</label>
           {isEditing ? (
