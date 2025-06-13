@@ -15,6 +15,7 @@ import EditProfile from "./components/settings/EditUserProfile";
 import ChangePassword from "./components/settings/EditPassword";
 import Profile from "./components/settings/Profile";
 import DeletedRecordsPage from "./components/cases/deletedRecordsPage";
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,49 +47,49 @@ function App() {
     }
     setIsLoading(false);
   }, []);
+  
   // Show loading while checking authentication
   if (isLoading) {
     return (
-      <div className="flex items-center  bg-gray-900 text-gray-100 justify-center h-screen">
+      <div className="flex items-center bg-gray-900 text-gray-100 justify-center h-screen">
         Loading...
       </div>
     );
   }
 
   // Redirect to login if not authenticated
- // if (!isAuthenticated) {
-   // window.location.href = "http://localhost:3000/login";
-    //return null;
-  //}
+  if (!isAuthenticated) {
+    window.location.href = "https://mcu-sdars.vercel.app/#/login";
+    return null;
+  }
 
   return (
     <HashRouter>
-    <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
-      {/* bg1 */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br" />
-        <div className="absolute inset-0" />
-      </div>
-      
-      <Sidebar />
-      <Routes>
-        <Route index element={<OverviewPage />} />
-        <Route path="/records" element={<RecordsPage />} />
-        <Route path="/users" element={<UsersPage />} />
-        {/* <Route path="/orders" element={<OrdersPage />} /> */}
-        <Route path="/analytics" element={<AnalyticsPage />} />
-        <Route path="/settings" element={<SettingsPages />} />
-        <Route path="/add-record" element={<AddRecordForm />} />
-        <Route path="/edit-record/:id" element={<EditRecordForm />} />
-        <Route path="/deleted-records" element={<DeletedRecordsPage />} />
-        <Route path="/users/:userId/activity" element={<UserActivityLog />} />
-        <Route path="/edit-user/:id" element={<EditUserForm />} />
-        <Route path="/edit-profile" element={<EditProfile />} />
-        <Route path="/change-password" element={<ChangePassword />} />
-        <Route path="/settingspage" element={<SettingsPages />} />
+      <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
+        {/* bg1 */}
+        <div className="fixed inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-br" />
+          <div className="absolute inset-0" />
+        </div>
         
-      </Routes>
-    </div>
+        <Sidebar />
+        <Routes>
+          <Route index element={<OverviewPage />} />
+          <Route path="/records" element={<RecordsPage />} />
+          <Route path="/users" element={<UsersPage />} />
+          {/* <Route path="/orders" element={<OrdersPage />} /> */}
+          <Route path="/analytics" element={<AnalyticsPage />} />
+          <Route path="/settings" element={<SettingsPages />} />
+          <Route path="/add-record" element={<AddRecordForm />} />
+          <Route path="/edit-record/:id" element={<EditRecordForm />} />
+          <Route path="/deleted-records" element={<DeletedRecordsPage />} />
+          <Route path="/users/:userId/activity" element={<UserActivityLog />} />
+          <Route path="/edit-user/:id" element={<EditUserForm />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/settingspage" element={<SettingsPages />} />
+        </Routes>
+      </div>
     </HashRouter>
   );
 }
