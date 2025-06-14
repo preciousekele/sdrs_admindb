@@ -32,7 +32,7 @@ export const fetchRecords = async (token) => {
  */
 export const createRecord = async (recordData, token) => {
   try {
-    const response = await fetch("http://localhost:5000/api/records", {
+    const response = await fetch("https://sdars-backend.onrender.com/api/records", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ export const deleteRecord = async (id, token) => {
  */
 export const fetchStats = async (token) => {
   try {
-    const response = await fetch("http://localhost:5000/api/records/stats", {
+    const response = await fetch("https://sdars-backend.onrender.com/api/records/stats", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
