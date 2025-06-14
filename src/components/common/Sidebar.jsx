@@ -48,7 +48,7 @@ const Sidebar = () => {
     
     // 4. Redirect to home page
     //pushed to github, this would be changed
-    window.location.href = "https://preciousekele.github.io/sdars_frontend/#/login";
+    window.location.href = "https://mcu-sdars.vercel.app/#/login";
   };
 
   const handleLogoutCancel = () => {
