@@ -117,10 +117,7 @@ function App() {
   if (isLoading) {
     return (
       <div className="flex items-center bg-gray-900 text-gray-100 justify-center h-screen">
-        <div className="text-center">
-          <div className="spinner"></div>
-          <p className="mt-4">Verifying authentication...</p>
-        </div>
+        Loading...
       </div>
     );
   }
