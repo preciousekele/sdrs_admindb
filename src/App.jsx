@@ -1,6 +1,5 @@
 import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import OverviewPage from "./pages/admindashboard/Overview";
 import Sidebar from "./components/common/Sidebar";
 import UsersPage from "./pages/admindashboard/UsersPage";
@@ -19,50 +18,124 @@ import DeletedRecordsPage from "./components/cases/deletedRecordsPage";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  
   useEffect(() => {
-    // Try to get from URL params first (for initial login)
-    const params = new URLSearchParams(window.location.search);
-    const tokenFromURL = params.get('token');
-    const userFromURL = params.get('user');
-    
-    if (tokenFromURL && userFromURL) {
-      // Store in localStorage for future use
-      localStorage.setItem("token", tokenFromURL);
-      localStorage.setItem("user", userFromURL);
-      // Clean URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-      setIsAuthenticated(true);
+    const checkAuthentication = () => {
+      try {
+        // Try to get from URL params first (for initial login)
+        const params = new URLSearchParams(window.location.search);
+        const tokenFromURL = params.get('token');
+        const userFromURL = params.get('user');
+        
+        console.log("ADMIN APP: Checking URL params...");
+        console.log("Token from URL:", tokenFromURL ? "Present" : "Not found");
+        console.log("User from URL:", userFromURL ? "Present" : "Not found");
+        
+        if (tokenFromURL && userFromURL) {
+          try {
+            // Decode and parse user data
+            const decodedUser = JSON.parse(decodeURIComponent(userFromURL));
+            console.log("ADMIN APP: Decoded user:", decodedUser);
+            
+            // Verify user is admin
+            if (decodedUser.role !== "admin") {
+              console.log("ADMIN APP: User is not admin, redirecting to login");
+              redirectToLogin();
+              return;
+            }
+            
+            // Store in localStorage for future use
+            localStorage.setItem("token", decodeURIComponent(tokenFromURL));
+            localStorage.setItem("user", JSON.stringify(decodedUser));
+            
+            // Clean URL to remove sensitive data
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+            
+            console.log("ADMIN APP: Authentication successful via URL params");
+            setIsAuthenticated(true);
+            setIsLoading(false);
+            return;
+          } catch (parseError) {
+            console.error("ADMIN APP: Error parsing URL user data:", parseError);
+          }
+        }
+        
+        // Regular localStorage check for returning users
+        const token = localStorage.getItem("token");
+        const userString = localStorage.getItem("user");
+        
+        console.log("ADMIN APP: Checking localStorage...");
+        console.log("Token:", token ? "Present" : "Not found");
+        console.log("User string:", userString ? "Present" : "Not found");
+        
+        if (token && userString) {
+          try {
+            const user = JSON.parse(userString);
+            console.log("ADMIN APP: Parsed user from localStorage:", user);
+            
+            if (user.role === "admin") {
+              console.log("ADMIN APP: Authentication successful via localStorage");
+              setIsAuthenticated(true);
+            } else {
+              console.log("ADMIN APP: User is not admin");
+              redirectToLogin();
+              return;
+            }
+          } catch (parseError) {
+            console.error("ADMIN APP: Error parsing user data from localStorage:", parseError);
+            redirectToLogin();
+            return;
+          }
+        } else {
+          console.log("ADMIN APP: No valid authentication found");
+          redirectToLogin();
+          return;
+        }
+        
+      } catch (error) {
+        console.error("ADMIN APP: Authentication check error:", error);
+        redirectToLogin();
+        return;
+      }
+      
       setIsLoading(false);
-      return;
-    }
+    };
     
-    // Regular localStorage check for returning users
-    const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log("ADMIN APP: Reading token:", token);
-    console.log("ADMIN APP: Reading user:", user);
-    if (token && user.role === "admin") {
-      setIsAuthenticated(true);
-    }
-    setIsLoading(false);
+    checkAuthentication();
   }, []);
+  
+  const redirectToLogin = () => {
+    // Clear any existing auth data
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    
+    console.log("ADMIN APP: Redirecting to login...");
+    window.location.href = "https://mcu-sdars.vercel.app/#/login";
+  };
   
   // Show loading while checking authentication
   if (isLoading) {
     return (
       <div className="flex items-center bg-gray-900 text-gray-100 justify-center h-screen">
-        Loading...
+        <div className="text-center">
+          <div className="spinner"></div>
+          <p className="mt-4">Verifying authentication...</p>
+        </div>
       </div>
     );
   }
-
+  
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
-    window.location.href = "https://mcu-sdars.vercel.app/#/login";
-    return null;
+    return (
+      <div className="flex items-center bg-gray-900 text-gray-100 justify-center h-screen">
+        <div className="text-center">
+          <p>Redirecting to login...</p>
+        </div>
+      </div>
+    );
   }
-
+  
   return (
     <HashRouter>
       <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
@@ -77,7 +150,6 @@ function App() {
           <Route index element={<OverviewPage />} />
           <Route path="/records" element={<RecordsPage />} />
           <Route path="/users" element={<UsersPage />} />
-          {/* <Route path="/orders" element={<OrdersPage />} /> */}
           <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/settings" element={<SettingsPages />} />
           <Route path="/add-record" element={<AddRecordForm />} />
