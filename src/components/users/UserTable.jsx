@@ -24,9 +24,9 @@ const UserTable = () => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token"); // adjust based on your token storage
+        const token = localStorage.getItem("token"); 
         const response = await axios.get(
-          "http://localhost:5000/api/users/all-users",
+          "https://sdars-backend.onrender.com/api/users/all-users",
           {
             headers: {
               Authorization: `Bearer ${token}`,
