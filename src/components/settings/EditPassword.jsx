@@ -56,7 +56,7 @@ const ChangePassword = () => {
       
       console.log("Request payload:", JSON.stringify(payload));
       
-      const response = await fetch("http://localhost:5000/api/users/profile/change-password", {
+      const response = await fetch("https://sdars-backend.onrender.com/api/users/profile/change-password", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
