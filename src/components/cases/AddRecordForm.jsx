@@ -115,6 +115,7 @@ const AddRecordForm = () => {
             className="w-full bg-gray-700 rounded p-2"
             required
           >
+            {/* levels */}
             <option value="100">100</option>
             <option value="200">200</option>
             <option value="300">300</option>
