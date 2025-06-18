@@ -32,7 +32,7 @@ const OverviewPage = () => {
 
         // Fetch stats
         const statsRes = await fetch(
-          "http://localhost:5000/api/records/stats",
+          "https://sdars-backend.onrender.com/api/records/stats",
           {
             method: "GET",
             headers: {

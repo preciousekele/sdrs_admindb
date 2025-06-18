@@ -22,7 +22,7 @@ const UsersPage = () => {
         setLoading(true);
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:5000/api/users/stats", {
+        const res = await fetch("https://sdars-backend.onrender.com/api/users/stats", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ const UsersPage = () => {
     const updateLastSeen = async () => {
       try {
         const token = localStorage.getItem("token");
-        await fetch("http://localhost:5000/api/users/heartbeat", {
+        await fetch("https://sdars-backend.onrender.com/api/users/heartbeat", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,

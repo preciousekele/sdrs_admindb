@@ -4,7 +4,6 @@ import tailwindcss from '@tailwindcss/vite';
 import path from 'path'; 
 
 export default defineConfig({
-  base: '/sdars_admindb/',  
   plugins: [
     tailwindcss(),
     react()
@@ -29,7 +28,11 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+<<<<<<< HEAD
       '@': path.resolve(__dirname, 'src') // 
+=======
+      '@': path.resolve(__dirname, 'src') 
+>>>>>>> 1f0ce653374a1b8a6b7207a0f192fa26f3db4ff1
     }
   }
 });

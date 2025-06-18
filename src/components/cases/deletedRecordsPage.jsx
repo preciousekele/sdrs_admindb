@@ -39,7 +39,7 @@ const DeletedRecordsPage = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "http://localhost:5000/api/records/deleted/all",
+        "https://sdars-backend.onrender.com/api/records/deleted/all",
         {
           method: "GET",
           headers: {
@@ -86,7 +86,7 @@ const DeletedRecordsPage = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/records/restore/${id}`,
+        `https://sdars-backend.onrender.com/api/records/restore/${id}`,
         {
           method: "PATCH",
           headers: {

@@ -17,8 +17,8 @@ const UserActivityLog = () => {
       }
 
       try {
-        const token = localStorage.getItem('token'); // Ensure the token is available
-        const response = await axios.get(`http://localhost:5000/api/users/user/${userId}/activity`, {
+        const token = localStorage.getItem('token'); 
+        const response = await axios.get(`https://sdars-backend.onrender.com/api/users/user/${userId}/activity`, {
           
           headers: {
             Authorization: `Bearer ${token}`,

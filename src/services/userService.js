@@ -7,7 +7,7 @@
  */
 export const updateUser = async (id, userData, token) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/users/edit-user/${id}`, {
+      const response = await fetch(`https://sdars-backend.onrender.com/api/users/edit-user/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -36,7 +36,7 @@ export const updateUser = async (id, userData, token) => {
    */
   export const deleteUser = async (id, token) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/users/delete-user/${id}`, {
+      const response = await fetch(`https://sdars-backend.onrender.com/api/users/delete-user/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

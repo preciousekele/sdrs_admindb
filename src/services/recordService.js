@@ -5,7 +5,7 @@
  */
 export const fetchRecords = async (token) => {
   try {
-    const response = await fetch("http://localhost:5000/api/records", {
+    const response = await fetch("https://sdars-backend.onrender.com/api/records", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -32,7 +32,7 @@ export const fetchRecords = async (token) => {
  */
 export const createRecord = async (recordData, token) => {
   try {
-    const response = await fetch("http://localhost:5000/api/records", {
+    const response = await fetch("https://sdars-backend.onrender.com/api/records", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -61,7 +61,7 @@ export const createRecord = async (recordData, token) => {
  */
 export const updateRecord = async (id, recordData, token) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/records/${id}`, {
+    const response = await fetch(`https://sdars-backend.onrender.com/api/records/${id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -89,7 +89,7 @@ export const updateRecord = async (id, recordData, token) => {
  */
 export const deleteRecord = async (id, token) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/records/${id}`, {
+    const response = await fetch(`https://sdars-backend.onrender.com/api/records/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ export const deleteRecord = async (id, token) => {
  */
 export const fetchStats = async (token) => {
   try {
-    const response = await fetch("http://localhost:5000/api/records/stats", {
+    const response = await fetch("https://sdars-backend.onrender.com/api/records/stats", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

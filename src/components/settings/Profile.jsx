@@ -18,7 +18,7 @@ const Profile = () => {
     const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem("token"); // Adjust key as needed
-        const response = await axios.get("http://localhost:5000/api/users/profile", {
+        const response = await axios.get("https://sdars-backend.onrender.com/api/users/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
