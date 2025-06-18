@@ -16,12 +16,14 @@ const EditRecordForm = () => {
   const [formData, setFormData] = useState({
     studentName: record?.studentName || "",
     matricNumber: record?.matricNumber || "",
-    level: record?.level || "100", // Added level field with default value
+    level: record?.level || "100",
     department: record?.department || "",
     offense: record?.offense || "",
     punishment: record?.punishment || "",
     date: record?.date || "",
-    status: record?.status || "Pending", // Default to first option
+    status: record?.status || "Pending",
+    punishmentDuration: record?.punishmentDuration || "Nil",
+    resumptionPeriod: record?.resumptionPeriod || "Nil",
   });
 
   const toggleEdit = () => setIsEditing(!isEditing);
@@ -65,6 +67,8 @@ const EditRecordForm = () => {
       punishment: record?.punishment || "",
       date: record?.date || "",
       status: record?.status || "Pending",
+      punishmentDuration: record?.punishmentDuration || "Nil",
+      resumptionPeriod: record?.resumptionPeriod || "Nil",
     });
   };
 
@@ -222,6 +226,45 @@ const EditRecordForm = () => {
           ) : (
             <div className="p-2 bg-gray-700 rounded-md text-gray-300">
               {formData.punishment}
+            </div>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-400 mb-1">
+            Punishment Duration
+          </label>
+          {isEditing ? (
+            <input
+              type="text"
+              id="punishmentDuration"
+              value={formData.punishmentDuration}
+              onChange={handleChange}
+              className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              placeholder=" Nil"
+            />
+          ) : (
+            <div className="p-2 bg-gray-700 rounded-md text-gray-300">
+              {formData.punishmentDuration || "Nil"}
+            </div>
+          )}
+        </div>
+
+        {/* Resumption Date */}
+        <div className="mb-6">
+          <label className="block text-gray-400 mb-1">Resumption Date</label>
+          {isEditing ? (
+            <input
+              type="text"
+              id="resumptionPeriod"
+              value={formData.resumptionPeriod}
+              onChange={handleChange}
+              className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              placeholder="Nil"
+            />
+          ) : (
+            <div className="p-2 bg-gray-700 rounded-md text-gray-300">
+              {formData.resumptionPeriod || "Nil"}
             </div>
           )}
         </div>

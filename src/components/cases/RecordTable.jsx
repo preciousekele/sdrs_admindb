@@ -186,9 +186,14 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     {indexOfFirstRecord + index + 1}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100 cursor-pointer hover:text-gray-300"
+                    onClick={() => openModal(record)}
+                    title="View full record details"
+                  >
                     {record.studentName || "N/A"}
                   </td>
+
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     {record.matricNumber || "N/A"}
                   </td>
@@ -241,7 +246,10 @@ const RecordsTable = ({ records, onDeleteRecord }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="10" className="px-6 py-4 text-center text-gray-300">
+                <td
+                  colSpan="10"
+                  className="px-6 py-4 text-center text-gray-300"
+                >
                   No records found
                 </td>
               </tr>

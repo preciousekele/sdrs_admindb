@@ -14,9 +14,11 @@ const AddRecordForm = () => {
     level: "100",
     department: "",
     offense: "",
-    punishment: "",
+    punishment: "Nil",
     date: "",
     status: "pending",
+    punishmentDuration: "Nil",
+    resumptionPeriod: "Nil",
   });
 
   const handleChange = (e) => {
@@ -49,9 +51,11 @@ const AddRecordForm = () => {
         level: "100",
         department: "",
         offense: "",
-        punishment: "",
+        punishment: "Nil",
         date: "",
         status: "pending",
+        punishmentDuration: "Nil",
+        resumptionPeriod: "Nil",
       });
 
       // Navigate back to records page
@@ -152,6 +156,30 @@ const AddRecordForm = () => {
             onChange={handleChange}
             className="w-full bg-gray-700 rounded p-2"
             required
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1">Duration of Punishment</label>
+          <input
+            type="text"
+            name="punishmentDuration"
+            value={formData.punishmentDuration}
+            onChange={handleChange}
+            className="w-full bg-gray-700 rounded p-2"
+            placeholder="e.g. 2 months or First Semester"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1">Resumption Period</label>
+          <input
+            type="text"
+            name="resumptionPeriod"
+            value={formData.resumptionPeriod}
+            onChange={handleChange}
+            className="w-full bg-gray-700 rounded p-2"
+            placeholder="e.g. Second Semester or Next Session"
           />
         </div>
 

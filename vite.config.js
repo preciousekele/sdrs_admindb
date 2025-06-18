@@ -29,7 +29,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src') // ✅ use absolute path
+      '@': path.resolve(__dirname, 'src') // 
     }
   }
 });

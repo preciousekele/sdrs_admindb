@@ -110,17 +110,17 @@ const RecordDetailsModal = ({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
-              <h3 className="text-sm font-medium text-gray-400 mb-1">
-                Level
-              </h3>
+              <h3 className="text-sm font-medium text-gray-400 mb-1">Level</h3>
               <p className="text-lg text-gray-200">{record.level}</p>
             </div>
+
             <div>
               <h3 className="text-sm font-medium text-gray-400 mb-1">
                 Department
               </h3>
               <p className="text-lg text-gray-200">{record.department}</p>
             </div>
+
             <div>
               <h3 className="text-sm font-medium text-gray-400 mb-1">
                 Offense
@@ -134,15 +134,40 @@ const RecordDetailsModal = ({
               </h3>
               <p className="text-lg text-gray-200">{record.punishment}</p>
             </div>
+
             <div>
               <h3 className="text-sm font-medium text-gray-400 mb-1">Date</h3>
               <p className="text-lg text-gray-200">{record.date}</p>
             </div>
+
             <div>
               <h3 className="text-sm font-medium text-gray-400 mb-1">Status</h3>
-              <span className=" py-1 text-gray-200 text-lg font-medium">
-                {record.status}
-              </span>
+              <p className="text-lg text-gray-200">{record.status}</p>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-medium text-gray-400 mb-1">
+                Offense Count
+              </h3>
+              <p className="text-lg text-gray-200">{record.offenseCount}</p>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-medium text-gray-400 mb-1">
+                Punishment Duration
+              </h3>
+              <p className="text-lg text-gray-200">
+                {record.punishmentDuration || "Nil"}
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-medium text-gray-400 mb-1">
+                Resumption Date
+              </h3>
+              <p className="text-lg text-gray-200">
+                {record.resumptionPeriod || "Nil"}
+              </p>
             </div>
           </div>
 
@@ -169,7 +194,7 @@ const RecordDetailsModal = ({
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition-colors"
             >
               <Download className="w-4 h-4" />
-               PDF
+              PDF
             </button>
           </div>
         </div>
