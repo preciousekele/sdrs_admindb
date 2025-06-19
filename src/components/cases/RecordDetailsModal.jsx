@@ -50,7 +50,7 @@ const RecordDetailsModal = ({
   const confirmDelete = async () => {
     if (
       !window.confirm(
-        "ARE YOU SURE YOU WANT TO PERMANENTLY DELETE THIS RECORD? "
+        "ARE YOU SURE YOU WANT TO PERMANENTLY DELETE THIS RECORD? This will also update offense counts for other records of the same student."
       )
     )
       return;
@@ -61,13 +61,16 @@ const RecordDetailsModal = ({
       const token = localStorage.getItem("token");
       if (!token) {
         console.error("No token found!");
+        alert("Authentication token not found. Please log in again.");
         return;
       }
-      console.log("Token found:", token); // Log the token for debugging
 
       // Actually call the delete service
       const response = await deleteRecord(record.id, token);
-      console.log("Delete response:", response); // Log the response from delete service
+      console.log("Delete response:", response);
+
+      // Show success message
+      alert("Record deleted successfully!");
 
       // Assuming deletion was successful, handle UI update
       if (onDelete) {
@@ -77,10 +80,27 @@ const RecordDetailsModal = ({
       onClose(); // close the details modal
     } catch (error) {
       console.error("Error deleting record:", error);
+      alert(`Failed to delete record: ${error.message || 'Unknown error'}`);
+    }
+  };
+
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (error) {
+      return dateString; // Return original if formatting fails
     }
   };
 
   if (!isOpen || !record) return null;
+
   return (
     <>
       {/* Main Details Modal */}
@@ -91,7 +111,7 @@ const RecordDetailsModal = ({
         {/* Modal content */}
         <div
           ref={modalRef}
-          className="relative bg-gray-800 border border-gray-700 rounded-lg p-6 max-w-2xl w-full shadow-xl"
+          className="relative bg-gray-800 border border-gray-700 rounded-lg p-6 max-w-2xl w-full shadow-xl max-h-[90vh] overflow-y-auto"
         >
           <div className="flex justify-between items-start mb-6">
             <div>
@@ -108,17 +128,18 @@ const RecordDetailsModal = ({
               <X className="w-6 h-6" />
             </button>
           </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
               <h3 className="text-sm font-medium text-gray-400 mb-1">Level</h3>
-              <p className="text-lg text-gray-200">{record.level}</p>
+              <p className="text-lg text-gray-200">{record.level || "N/A"}</p>
             </div>
 
             <div>
               <h3 className="text-sm font-medium text-gray-400 mb-1">
                 Department
               </h3>
-              <p className="text-lg text-gray-200">{record.department}</p>
+              <p className="text-lg text-gray-200">{record.department || "N/A"}</p>
             </div>
 
             <div>
@@ -137,7 +158,7 @@ const RecordDetailsModal = ({
 
             <div>
               <h3 className="text-sm font-medium text-gray-400 mb-1">Date</h3>
-              <p className="text-lg text-gray-200">{record.date}</p>
+              <p className="text-lg text-gray-200">{formatDate(record.date)}</p>
             </div>
 
             <div>
@@ -149,7 +170,15 @@ const RecordDetailsModal = ({
               <h3 className="text-sm font-medium text-gray-400 mb-1">
                 Offense Count
               </h3>
-              <p className="text-lg text-gray-200">{record.offenseCount}</p>
+              <p className="text-lg text-gray-200">
+                {record.offenseCount || 1}
+                <span className="text-sm text-gray-400 ml-1">
+                  {record.offenseCount === 1 ? "(1st offense)" : 
+                   record.offenseCount === 2 ? "(2nd offense)" :
+                   record.offenseCount === 3 ? "(3rd offense)" :
+                   `(${record.offenseCount}th offense)`}
+                </span>
+              </p>
             </div>
 
             <div>
@@ -161,7 +190,7 @@ const RecordDetailsModal = ({
               </p>
             </div>
 
-            <div>
+            <div className="md:col-span-2">
               <h3 className="text-sm font-medium text-gray-400 mb-1">
                 Resumption Date
               </h3>
