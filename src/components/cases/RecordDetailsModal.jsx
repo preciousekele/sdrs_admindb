@@ -149,11 +149,7 @@ const RecordDetailsModal = ({
               <h3 className="text-sm font-medium text-gray-400 mb-1">
                 Offense Count
               </h3>
-              <p className="text-lg text-gray-200">
-                {record.offenseCount || record.offenseCount === 0
-                  ? record.offenseCount
-                  : "0"}{" "}
-              </p>
+              <p className="text-lg text-gray-200">{record.offenseCount}</p>
             </div>
 
             <div>
