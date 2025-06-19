@@ -222,19 +222,19 @@ const RecordDetailsModal = ({
               Edit
             </button>
             <button
+              onClick={() => downloadRecordPDF(record)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition-colors"
+            >
+              <Download className="w-4 h-4" />
+              PDF
+            </button>
+            <button
               onClick={confirmDelete}
               className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition-colors"
               aria-label="Delete record"
             >
               <Trash2 className="w-4 h-4" />
               Delete
-            </button>
-            <button
-              onClick={() => downloadRecordPDF(record)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition-colors"
-            >
-              <Download className="w-4 h-4" />
-              PDF
             </button>
           </div>
         </div>

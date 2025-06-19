@@ -174,11 +174,8 @@ const AddRecordForm = () => {
             value={formData.punishmentDuration}
             onChange={handleChange}
             className="w-full bg-gray-700 rounded p-2"
-            placeholder="Enter punishment duration (e.g., '2 weeks', '1 month') or leave blank for Nil"
+            placeholder=""
           />
-          <small className="text-gray-400 text-sm">
-            Leave blank if no specific duration applies
-          </small>
         </div>
 
         <div>
@@ -189,11 +186,8 @@ const AddRecordForm = () => {
             value={formData.resumptionPeriod}
             onChange={handleChange}
             className="w-full bg-gray-700 rounded p-2"
-            placeholder="Enter resumption date (e.g., '2024-01-15', 'After 2 weeks') or leave blank for Nil"
+            placeholder=""
           />
-          <small className="text-gray-400 text-sm">
-            Leave blank if no resumption period applies
-          </small>
         </div>
 
         <div>
