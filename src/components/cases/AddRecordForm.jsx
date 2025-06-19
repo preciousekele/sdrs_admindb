@@ -168,7 +168,7 @@ const AddRecordForm = () => {
             value={formData.punishmentDuration}
             onChange={handleChange}
             className="w-full bg-gray-700 rounded p-2"
-            placeholder="e.g. 2 months or First Semester"
+            placeholder=""
           />
         </div>
 
@@ -180,7 +180,7 @@ const AddRecordForm = () => {
             value={formData.resumptionPeriod}
             onChange={handleChange}
             className="w-full bg-gray-700 rounded p-2"
-            placeholder="e.g. Second Semester or Next Session"
+            placeholder=""
           />
         </div>
 
