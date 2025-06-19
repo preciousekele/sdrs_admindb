@@ -80,7 +80,7 @@ const RecordDetailsModal = ({
       onClose(); // close the details modal
     } catch (error) {
       console.error("Error deleting record:", error);
-      alert(`Failed to delete record: ${error.message || 'Unknown error'}`);
+      alert(`Failed to delete record: ${error.message || "Unknown error"}`);
     }
   };
 
@@ -89,10 +89,10 @@ const RecordDetailsModal = ({
     if (!dateString) return "N/A";
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     } catch (error) {
       return dateString; // Return original if formatting fails
@@ -128,7 +128,7 @@ const RecordDetailsModal = ({
               <X className="w-6 h-6" />
             </button>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
               <h3 className="text-sm font-medium text-gray-400 mb-1">Level</h3>
@@ -139,7 +139,9 @@ const RecordDetailsModal = ({
               <h3 className="text-sm font-medium text-gray-400 mb-1">
                 Department
               </h3>
-              <p className="text-lg text-gray-200">{record.department || "N/A"}</p>
+              <p className="text-lg text-gray-200">
+                {record.department || "N/A"}
+              </p>
             </div>
 
             <div>
@@ -173,10 +175,13 @@ const RecordDetailsModal = ({
               <p className="text-lg text-gray-200">
                 {record.offenseCount || 1}
                 <span className="text-sm text-gray-400 ml-1">
-                  {record.offenseCount === 1 ? "(1st offense)" : 
-                   record.offenseCount === 2 ? "(2nd offense)" :
-                   record.offenseCount === 3 ? "(3rd offense)" :
-                   ``}
+                  {record.offenseCount === 1
+                    ? "(1st offense)"
+                    : record.offenseCount === 2
+                    ? "(2nd offense)"
+                    : record.offenseCount === 3
+                    ? "(3rd offense)"
+                    : ``}
                 </span>
               </p>
             </div>
@@ -186,7 +191,10 @@ const RecordDetailsModal = ({
                 Punishment Duration
               </h3>
               <p className="text-lg text-gray-200">
-                {record.punishmentDuration || "Nil"}
+                {record.punishmentDuration?.toLowerCase() !== "nil" &&
+                record.punishmentDuration
+                  ? `Effective from ${record.punishmentDuration}`
+                  : "Nil"}
               </p>
             </div>
 
@@ -195,7 +203,10 @@ const RecordDetailsModal = ({
                 Resumption Date
               </h3>
               <p className="text-lg text-gray-200">
-                {record.resumptionPeriod || "Nil"}
+                {record.resumptionPeriod?.toLowerCase() !== "nil" &&
+                record.resumptionPeriod
+                  ? `Effective from ${record.resumptionPeriod}`
+                  : "Nil"}
               </p>
             </div>
           </div>
