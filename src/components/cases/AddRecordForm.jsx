@@ -14,11 +14,11 @@ const AddRecordForm = () => {
     level: "100",
     department: "",
     offense: "",
-    punishment: "Nil",
+    punishment: "",
     date: "",
     status: "pending",
-    punishmentDuration: "Nil",
-    resumptionPeriod: "Nil",
+    punishmentDuration: "",
+    resumptionPeriod: "",
   });
 
   const handleChange = (e) => {
@@ -42,7 +42,14 @@ const AddRecordForm = () => {
         throw new Error("Authentication token not found. Please log in again.");
       }
 
-      await createRecord(formData, token);
+      // Clean up the form data before sending
+      const cleanedFormData = {
+        ...formData,
+        punishmentDuration: formData.punishmentDuration.trim() || "Nil",
+        resumptionPeriod: formData.resumptionPeriod.trim() || "Nil",
+      };
+
+      await createRecord(cleanedFormData, token);
 
       // Reset form
       setFormData({
@@ -51,11 +58,11 @@ const AddRecordForm = () => {
         level: "100",
         department: "",
         offense: "",
-        punishment: "Nil",
+        punishment: "",
         date: "",
         status: "pending",
-        punishmentDuration: "Nil",
-        resumptionPeriod: "Nil",
+        punishmentDuration: "",
+        resumptionPeriod: "",
       });
 
       // Navigate back to records page
@@ -97,7 +104,7 @@ const AddRecordForm = () => {
         <div>
           <label className="block mb-1">Matric Number</label>
           <input
-            type="number" // Changed to number type for better validation
+            type="number"
             name="matricNumber"
             value={formData.matricNumber}
             onChange={handleChange}
@@ -115,7 +122,6 @@ const AddRecordForm = () => {
             className="w-full bg-gray-700 rounded p-2"
             required
           >
-            {/* levels */}
             <option value="100">100</option>
             <option value="200">200</option>
             <option value="300">300</option>
@@ -168,8 +174,11 @@ const AddRecordForm = () => {
             value={formData.punishmentDuration}
             onChange={handleChange}
             className="w-full bg-gray-700 rounded p-2"
-            placeholder=""
+            placeholder="Enter punishment duration (e.g., '2 weeks', '1 month') or leave blank for Nil"
           />
+          <small className="text-gray-400 text-sm">
+            Leave blank if no specific duration applies
+          </small>
         </div>
 
         <div>
@@ -180,8 +189,11 @@ const AddRecordForm = () => {
             value={formData.resumptionPeriod}
             onChange={handleChange}
             className="w-full bg-gray-700 rounded p-2"
-            placeholder=""
+            placeholder="Enter resumption date (e.g., '2024-01-15', 'After 2 weeks') or leave blank for Nil"
           />
+          <small className="text-gray-400 text-sm">
+            Leave blank if no resumption period applies
+          </small>
         </div>
 
         <div>

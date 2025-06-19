@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Pencil, Save, X } from "lucide-react"; // Added Save and X icons
+import { Pencil, Save, X } from "lucide-react";
 import { updateRecord } from "../../services/recordService";
 
 const EditRecordForm = () => {
@@ -22,8 +22,8 @@ const EditRecordForm = () => {
     punishment: record?.punishment || "",
     date: record?.date || "",
     status: record?.status || "Pending",
-    punishmentDuration: record?.punishmentDuration || "Nil",
-    resumptionPeriod: record?.resumptionPeriod || "Nil",
+    punishmentDuration: record?.punishmentDuration === "Nil" ? "" : (record?.punishmentDuration || ""),
+    resumptionPeriod: record?.resumptionPeriod === "Nil" ? "" : (record?.resumptionPeriod || ""),
   });
 
   const toggleEdit = () => setIsEditing(!isEditing);
@@ -42,7 +42,16 @@ const EditRecordForm = () => {
         return;
       }
 
-      const { ...dataWithoutDate } = formData; // Ignore date for update
+      // Clean up the form data before sending
+      const cleanedFormData = {
+        ...formData,
+        punishmentDuration: formData.punishmentDuration.trim() || "Nil",
+        resumptionPeriod: formData.resumptionPeriod.trim() || "Nil",
+      };
+
+      // Remove date from update data since it shouldn't be changed
+      const { date, ...dataWithoutDate } = cleanedFormData;
+      
       await updateRecord(record.id, dataWithoutDate, token);
 
       console.log("Record updated successfully!");
@@ -61,14 +70,14 @@ const EditRecordForm = () => {
       // Reset to original values
       studentName: record?.studentName || "",
       matricNumber: record?.matricNumber || "",
-      level: record?.level || "100", // Added level field reset
+      level: record?.level || "100",
       department: record?.department || "",
       offense: record?.offense || "",
       punishment: record?.punishment || "",
       date: record?.date || "",
       status: record?.status || "Pending",
-      punishmentDuration: record?.punishmentDuration || "Nil",
-      resumptionPeriod: record?.resumptionPeriod || "Nil",
+      punishmentDuration: record?.punishmentDuration === "Nil" ? "" : (record?.punishmentDuration || ""),
+      resumptionPeriod: record?.resumptionPeriod === "Nil" ? "" : (record?.resumptionPeriod || ""),
     });
   };
 
@@ -235,14 +244,19 @@ const EditRecordForm = () => {
             Punishment Duration
           </label>
           {isEditing ? (
-            <input
-              type="text"
-              id="punishmentDuration"
-              value={formData.punishmentDuration}
-              onChange={handleChange}
-              className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-              placeholder=" Nil"
-            />
+            <>
+              <input
+                type="text"
+                id="punishmentDuration"
+                value={formData.punishmentDuration}
+                onChange={handleChange}
+                className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                placeholder="Enter punishment duration or leave blank for Nil"
+              />
+              <small className="text-gray-400 text-sm">
+                Leave blank if no specific duration applies
+              </small>
+            </>
           ) : (
             <div className="p-2 bg-gray-700 rounded-md text-gray-300">
               {formData.punishmentDuration || "Nil"}
@@ -252,16 +266,21 @@ const EditRecordForm = () => {
 
         {/* Resumption Date */}
         <div className="mb-6">
-          <label className="block text-gray-400 mb-1">Resumption Date</label>
+          <label className="block text-gray-400 mb-1">Resumption Period</label>
           {isEditing ? (
-            <input
-              type="text"
-              id="resumptionPeriod"
-              value={formData.resumptionPeriod}
-              onChange={handleChange}
-              className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-              placeholder="Nil"
-            />
+            <>
+              <input
+                type="text"
+                id="resumptionPeriod"
+                value={formData.resumptionPeriod}
+                onChange={handleChange}
+                className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                placeholder="Enter resumption period or leave blank for Nil"
+              />
+              <small className="text-gray-400 text-sm">
+                Leave blank if no resumption period applies
+              </small>
+            </>
           ) : (
             <div className="p-2 bg-gray-700 rounded-md text-gray-300">
               {formData.resumptionPeriod || "Nil"}
@@ -269,23 +288,12 @@ const EditRecordForm = () => {
           )}
         </div>
 
-        {/* Date */}
+        {/* Date - Read Only */}
         <div className="mb-4">
-          <label className="block text-gray-400 mb-1">Date</label>
-          {isEditing ? (
-            <input
-              type="date"
-              id="date"
-              value={formData.date ? formData.date.slice(0, 10) : ""}
-              onChange={handleChange}
-              className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-              required
-            />
-          ) : (
-            <div className="p-2 bg-gray-700 rounded-md text-gray-300">
-              {new Date(formData.date).toLocaleDateString()}
-            </div>
-          )}
+          <label className="block text-gray-400 mb-1">Date (Read Only)</label>
+          <div className="p-2 bg-gray-700 rounded-md text-gray-300">
+            {new Date(formData.date).toLocaleDateString()}
+          </div>
         </div>
 
         {/* Status */}
@@ -299,9 +307,9 @@ const EditRecordForm = () => {
               className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
               required
             >
-              <option value="Pending">Pending</option>
-              <option value="Under Review">Under Review</option>
-              <option value="Resolved">Resolved</option>
+              <option value="pending">Pending</option>
+              <option value="review">Under Review</option>
+              <option value="resolved">Resolved</option>
             </select>
           ) : (
             <div className="p-2 bg-gray-700 rounded-md text-gray-300">
@@ -332,5 +340,4 @@ const EditRecordForm = () => {
   );
 };
 
-// recommiting
 export default EditRecordForm;

@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteRecord } from "../../services/recordService";
 import { downloadRecordPDF } from "../../utils/pdfUtils";
+
 const RecordDetailsModal = ({
   record,
   isOpen,
@@ -80,7 +81,6 @@ const RecordDetailsModal = ({
   };
 
   if (!isOpen || !record) return null;
-
   return (
     <>
       {/* Main Details Modal */}
