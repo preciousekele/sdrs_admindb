@@ -176,7 +176,7 @@ const RecordDetailsModal = ({
                   {record.offenseCount === 1 ? "(1st offense)" : 
                    record.offenseCount === 2 ? "(2nd offense)" :
                    record.offenseCount === 3 ? "(3rd offense)" :
-                   `(${record.offenseCount}th offense)`}
+                   }
                 </span>
               </p>
             </div>
