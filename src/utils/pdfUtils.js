@@ -55,15 +55,18 @@ export function downloadRecordPDF(record) {
     doc.text(value, valueMargin, yPos);
     yPos += lineSpacing;
   };
-  
-  addAlignedField("Student Name", record.studentName);
-  addAlignedField("Matric No", record.matricNumber);
-  addAlignedField("Level", record.level || "N/A");
-  addAlignedField("Department", record.department);
-  addAlignedField("Offense", record.offense);
-  addAlignedField("Status", record.status);
-  addAlignedField("Date", new Date(record.date).toLocaleDateString());  
-  addAlignedField("Punishment", record.punishment);
+addAlignedField("Student Name", record.studentName);
+addAlignedField("Matric No", record.matricNumber);
+addAlignedField("Level", record.level || "N/A");
+addAlignedField("Department", record.department);
+addAlignedField("Offense", record.offense);
+addAlignedField("Punishment", record.punishment);
+addAlignedField("Offense Count", record.offenseCount?.toString() || "0"); 
+addAlignedField("Punishment Duration", record.punishmentDuration || "Nil");
+addAlignedField("Resumption Date", record.resumptionPeriod || "Nil");
+addAlignedField("Status", record.status);
+addAlignedField("Date", new Date(record.date).toLocaleDateString());
+
   
  // Footer
  
