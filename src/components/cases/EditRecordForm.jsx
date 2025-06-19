@@ -251,11 +251,8 @@ const EditRecordForm = () => {
                 value={formData.punishmentDuration}
                 onChange={handleChange}
                 className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                placeholder="Enter punishment duration or leave blank for Nil"
+                placeholder="Nil"
               />
-              <small className="text-gray-400 text-sm">
-                Leave blank if no specific duration applies
-              </small>
             </>
           ) : (
             <div className="p-2 bg-gray-700 rounded-md text-gray-300">
@@ -275,11 +272,8 @@ const EditRecordForm = () => {
                 value={formData.resumptionPeriod}
                 onChange={handleChange}
                 className="w-full p-2 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                placeholder="Enter resumption period or leave blank for Nil"
+                placeholder="Nil"
               />
-              <small className="text-gray-400 text-sm">
-                Leave blank if no resumption period applies
-              </small>
             </>
           ) : (
             <div className="p-2 bg-gray-700 rounded-md text-gray-300">
@@ -290,7 +284,7 @@ const EditRecordForm = () => {
 
         {/* Date - Read Only */}
         <div className="mb-4">
-          <label className="block text-gray-400 mb-1">Date (Read Only)</label>
+          <label className="block text-gray-400 mb-1">Date</label>
           <div className="p-2 bg-gray-700 rounded-md text-gray-300">
             {new Date(formData.date).toLocaleDateString()}
           </div>
