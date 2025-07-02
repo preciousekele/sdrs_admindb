@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import OverviewPage from "./pages/admindashboard/Overview";
 import Sidebar from "./components/common/Sidebar";
@@ -49,7 +49,7 @@ function App() {
             localStorage.setItem("user", JSON.stringify(decodedUser));
             
             // Clean URL to remove sensitive data
-            window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.search.replace(/[?&](token|user)=[^&]*/g, '').replace(/^&/, '?').replace(/^\?$/, ''));
             
             console.log("ADMIN APP: Authentication successful via URL params");
             setIsAuthenticated(true);
@@ -110,7 +110,7 @@ function App() {
     localStorage.removeItem("user");
     
     console.log("ADMIN APP: Redirecting to login...");
-    window.location.href = "https://mcu-sdars.vercel.app/#/login";
+    window.location.href = "https://mcu-sdars.vercel.app/login";
   };
   
   // Show loading while checking authentication
@@ -134,7 +134,7 @@ function App() {
   }
   
   return (
-    <HashRouter>
+    <BrowserRouter>
       <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
         {/* bg1 */}
         <div className="fixed inset-0 z-0">
@@ -159,7 +159,7 @@ function App() {
           <Route path="/settingspage" element={<SettingsPages />} />
         </Routes>
       </div>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
