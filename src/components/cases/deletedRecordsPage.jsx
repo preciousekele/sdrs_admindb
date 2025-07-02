@@ -272,7 +272,7 @@ const DeletedRecordsPage = () => {
               <p className="text-sm mt-2">
                 {deletedRecords.length > 0
                   ? `Found ${deletedRecords.length} records but filter returned none.`
-                  : "No records were returned from the server."}
+                  : "..."}
               </p>
               <button
                 className="mt-2 text-blue-500 underline"
