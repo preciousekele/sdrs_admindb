@@ -81,6 +81,7 @@ function EditProfile() {
         }
       );
 
+      
       const data = await res.json();
 
       if (!res.ok) {
