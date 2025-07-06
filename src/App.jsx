@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import OverviewPage from "./pages/admindashboard/Overview";
 import Sidebar from "./components/common/Sidebar";
 import UsersPage from "./pages/admindashboard/UsersPage";
-import AnalyticsPage from "./pages/admindashboard/AnalyticsPage";
 import SettingsPages from "./pages/admindashboard/SettingsPages";
 import AddRecordForm from "./components/cases/AddRecordForm";
 import EditRecordForm from "./components/cases/EditRecordForm";
@@ -12,7 +11,6 @@ import UserActivityLog from "./components/users/userActivityLog";
 import EditUserForm from "./components/users/EditUserForm";
 import EditProfile from "./components/settings/EditUserProfile";
 import ChangePassword from "./components/settings/EditPassword";
-import Profile from "./components/settings/Profile";
 import DeletedRecordsPage from "./components/cases/deletedRecordsPage";
 
 function App() {
@@ -147,7 +145,6 @@ function App() {
           <Route index element={<OverviewPage />} />
           <Route path="/records" element={<RecordsPage />} />
           <Route path="/users" element={<UsersPage />} />
-          <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/settings" element={<SettingsPages />} />
           <Route path="/add-record" element={<AddRecordForm />} />
           <Route path="/edit-record/:id" element={<EditRecordForm />} />
