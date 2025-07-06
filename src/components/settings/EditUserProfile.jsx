@@ -67,7 +67,7 @@ function EditProfile() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        "http://localhost:5000/api/users/profile/update",
+        "https://sdars-backend.onrender.com/api/users/profile/update",
         {
           method: "PUT",
           headers: {
